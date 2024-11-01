@@ -18,7 +18,7 @@ import { METAMASK_URL } from '@/lib/services/chain-config'
 
 
 
-const NotConnectedWalletButton = () => {
+const NotConnectedWalletButton = ({ buttonText = "Connect Wallet" }) => {
   const [open, setOpen] = useState(false);
   const { isActive } = useWeb3React()
   const connectionType =
@@ -72,7 +72,7 @@ const NotConnectedWalletButton = () => {
     <div className="">
       <Dialog>
         <DialogTrigger asChild>
-          <button className="btn spray px-6 py-3">Connect Wallet</button>
+          <button className="btn px-6">{buttonText}</button>
         </DialogTrigger>
 
         <DialogContent className="max-w-sm w-full bg-gradient-bg text-white border-0">

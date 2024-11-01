@@ -16,7 +16,7 @@ const WalletOption: FC<OptionsParam> = ({ walletName, iconName, connectionType, 
   const connectWallet = useConnectToWallet(connectionType, setOpen)
 
   return (
-    <Button className="btn spray-dark w-full flex justify-start items-center gap-x-2" size="auto"
+    <Button className="btn w-full flex justify-start items-center gap-x-2" size="auto"
       onClick={connectWallet}
     >
       <div className="px-2">
