@@ -1,5 +1,4 @@
 'use client'
-import NavBar from "@/components/navbar";
 
 import NotConnectedWalletButton from "@/components/WalletButtons/NotConnected";
 import { useWeb3React } from "@web3-react/core";
@@ -11,8 +10,6 @@ export default function Home() {
 
   return (
     <main className="overflow-y-auto h-full">
-      <NavBar />
-
       <section className="text-center min-h-screen flex flex-col items-center justify-center space-y-16">
         <div className="max-w-4xl space-y-4">
           <h1 className="text-6xl font-bold "> Secure <span className="text-spray-600">Family Funds</span> with
