@@ -44,7 +44,7 @@ const buildWalletConnectConnector = () => {
           options: {
             projectId: process.env.NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID || "",
             rpcMap: CHAIN_TO_URL_MAP,
-            chains: [40],
+            chains: [defaultChainId],
             showQrModal: true,
             metadata: {
               name: 'wallet-connection-example',
