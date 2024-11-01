@@ -4,10 +4,13 @@ import WalletButton from './WalletButtons'
 
 const NavBar = () => {
   return (
-    <div className="border-b">
-      <div className="container py-4 flex items-center justify-between">
+    <div className="bg-white py-3">
+      <div className="container flex items-center justify-between">
         <aside className="font-bold text-xl sm:text-2xl">
           <Link href="/">FamDao</Link>
+        </aside>
+
+        <aside>
         </aside>
 
         <aside className="">

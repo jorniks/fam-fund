@@ -5,6 +5,7 @@ import RecoidContextProvider from "@/providers/recoilContextProvider";
 import Web3ContextProvider from "@/providers/web3ReactProvider";
 import NavBar from "@/components/navbar";
 import { Toaster } from "@/components/toaster/toaster";
+import "bootstrap-icons/font/bootstrap-icons.css"
 
 const font = Montserrat({ subsets: ["latin"] });
 
@@ -20,7 +21,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={font.className + " bg-no-repeat bg-cover h-screen overflow-hidden"}>
+      <body className={font.className + " bg-zinc-100 h-screen overflow-hidden"}>
         <RecoidContextProvider>
           <Web3ContextProvider>
             <NavBar />
