@@ -9,9 +9,10 @@ const config: Config = {
   theme: {
     extend: {
       backgroundImage: {
+        'underlay': "url('https://images.unsplash.com/photo-1588345921523-c2dcdb7f1dcd?w=800&dpr=2&q=80')",
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
-        "gradient-conic":
-          "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
+        "gradient-conic": "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
+        "gradient-bg": "linear-gradient(to right top, #0d173d, #092449, #073153, #0b3d5c, #154a64)",
       },
   
       colors: {

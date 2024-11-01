@@ -1,4 +1,5 @@
 import { loadingState } from "@/app/state/atoms/atom";
+import { toast } from "@/components/toaster/use-toast";
 import { errorCode } from "@/lib/metamask-error-codes";
 import { getConnection } from "@/lib/wallet/connector";
 import { ConnectionType } from "@/lib/wallet/supported-connectors";
@@ -28,7 +29,7 @@ export default function useConnectToWallet(connectionType: ConnectionType, setOp
       return;
     } catch (connectWalletError: {} | any) {
       setIsLoading(false)
-      console.log({variant: 'error', description: errorCode[connectWalletError?.code as keyof typeof errorCode] || connectWalletError?.message})
+      toast({variant: 'error', description: errorCode[connectWalletError?.code as keyof typeof errorCode] || connectWalletError?.message})
     }
   }
   

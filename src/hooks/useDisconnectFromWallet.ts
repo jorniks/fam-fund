@@ -1,3 +1,4 @@
+import { toast } from "@/components/toaster/use-toast";
 import { getConnection } from "@/lib/wallet/connector";
 import { ConnectionType } from "@/lib/wallet/supported-connectors";
 import { Connector } from "@web3-react/types";
@@ -21,7 +22,7 @@ export default function useDisconnectFromWallet(setOpen: React.Dispatch<React.Se
       setOpen(false)
       return;
     } catch (disconnectWalletError) {
-      console.log({variant: "error", description: "An error occured trying to disconnect wallet. Try again"})
+      toast({variant: "error", description: "An error occured trying to disconnect wallet. Try again"})
     }
   }
 

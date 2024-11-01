@@ -4,14 +4,16 @@ import WalletButton from './WalletButtons'
 
 const NavBar = () => {
   return (
-    <div className="border-b sm:px-8 px-2 py-4 flex items-center justify-between">
-      <aside className="font-bold text-xl sm:text-2xl">
-        <Link href="/">Web3-Wallets</Link>
-      </aside>
+    <div className="border-b">
+      <div className="container py-4 flex items-center justify-between">
+        <aside className="font-bold text-xl sm:text-2xl">
+          <Link href="/">FamDao</Link>
+        </aside>
 
-      <aside className="">
-        <WalletButton />
-      </aside>
+        <aside className="">
+          <WalletButton />
+        </aside>
+      </div>
     </div>
   )
 }

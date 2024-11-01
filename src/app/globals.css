@@ -3,27 +3,44 @@
 @tailwind utilities;
 
 @layer utilities {
+  /* Hide scrollbar for Chrome, Safari and Opera */
+  .no-scrollbar::-webkit-scrollbar {
+      display: none;
+  }
+
+  /* Hide scrollbar for IE, Edge and Firefox */
+  .no-scrollbar {
+      -ms-overflow-style: none;  /* IE and Edge */
+      scrollbar-width: none;  /* Firefox */
+  }
+
   .text-balance {
     text-wrap: balance;
   }
 
-  .gradient-bg {
-    background-image: linear-gradient(to right top, #0d173d, #092449, #073153, #0b3d5c, #154a64);
+  main {
+    @apply container overflow-y-auto no-scrollbar h-full
+  }
+}
+
+@layer components {
+  .container {
+    @apply w-full max-w-[90%] mx-auto sm:px-4
   }
 
   .btn {
-    @apply outline-none shadow-md transition-all duration-500 rounded text-sm
+    @apply outline-none shadow-md transition-all duration-500 rounded text-sm hover:shadow-lg font-medium
   }
 
   .spray {
-    @apply hover:bg-spray-800 bg-spray-700 text-white
+    @apply hover:bg-spray-600 bg-spray-700 text-white
   }
 
   .spray-dark {
-    @apply hover:bg-spray-800 bg-spray-900 text-white
+    @apply hover:bg-spray-700 bg-spray-900 text-white
   }
 
   .chestnut {
-    @apply hover:bg-chestnut-800 bg-chestnut-700 text-white
+    @apply hover:bg-chestnut-600 bg-chestnut-700 text-white
   }
 }

@@ -3,7 +3,7 @@ import { shortenAddress } from '@/functions/format';
 import useDisconnectFromWallet from '@/hooks/useDisconnectFromWallet';
 import { ConnectionType } from '@/lib/wallet/supported-connectors';
 import { useWeb3React } from '@web3-react/core';
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
   Dialog,
   DialogContent,
@@ -17,12 +17,13 @@ import { NETWORK_LABEL } from '@/lib/network-list';
 import { Button } from '@/components/button';
 import Link from 'next/link';
 import { CHAIN_INFO } from '@/lib/services/chain-config';
+import { switchNetwork } from '@/lib/wallet/connector';
 
 
 const ConnectedWalletButton = () => {
   const [open, setOpen] = useState<boolean>(false);
   const [addressCopied, setAddressCopied] = useState<boolean>(false);
-  const { account, chainId, provider } = useWeb3React();
+  const { account, chainId, isActive } = useWeb3React();
   const connectionType = window?.localStorage?.getItem(
     "ConnectionType"
   ) as keyof typeof ConnectionType;
@@ -37,6 +38,13 @@ const ConnectedWalletButton = () => {
     }
   };
 
+  useEffect(() => {
+    if (isActive && chainId !== 1320) {
+      switchNetwork(1320, connectionType);
+    }
+  }, [chainId, connectionType, isActive])
+  
+
 
   return (
     <div className="">
@@ -45,7 +53,7 @@ const ConnectedWalletButton = () => {
           <button className="btn spray px-5 py-3">{account ? shortenAddress(account) : "Not Connected"}</button>
         </DialogTrigger>
 
-        <DialogContent className="max-w-sm w-full gradient-bg text-white border-0">
+        <DialogContent className="max-w-sm w-full bg-gradient-bg text-white border-0">
           <DialogHeader>
             <DialogTitle>Account</DialogTitle>
           </DialogHeader>
