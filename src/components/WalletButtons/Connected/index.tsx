@@ -53,7 +53,7 @@ const ConnectedWalletButton = () => {
           <button className="btn px-6">{account ? shortenAddress(account) : "Not Connected"}</button>
         </DialogTrigger>
 
-        <DialogContent className="max-w-sm w-full bg-gradient-bg text-white border-0">
+        <DialogContent className="max-w-sm w-full bg-white border-0">
           <DialogHeader>
             <DialogTitle>Account</DialogTitle>
           </DialogHeader>

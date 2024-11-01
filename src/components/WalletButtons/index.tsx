@@ -6,6 +6,7 @@ import ConnectedWalletButton from './Connected'
 
 const WalletButton = () => {
   const { account } = useWeb3React()
+  
   return (
     !account ?
       <NotConnectedWalletButton />

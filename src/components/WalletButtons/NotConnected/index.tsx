@@ -75,7 +75,7 @@ const NotConnectedWalletButton = ({ buttonText = "Connect Wallet" }) => {
           <button className="btn px-6">{buttonText}</button>
         </DialogTrigger>
 
-        <DialogContent className="max-w-sm w-full bg-gradient-bg text-white border-0">
+        <DialogContent className="max-w-sm w-full bg-white border-0">
           <DialogHeader>
             <DialogTitle>Connect wallet</DialogTitle>
             <DialogDescription>Click any of the below icons to connect your wallet to the app.</DialogDescription>
