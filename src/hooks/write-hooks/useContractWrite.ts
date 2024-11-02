@@ -49,7 +49,7 @@ export default function useContractWrite() {
         setLoadingState(false)
         return true;
       } catch (createFamilyAccountError: {} | any) {
-        toast({ variant: "error", description: errorCode[createFamilyAccountError?.code as keyof typeof errorCode] })
+        toast({ variant: "error", description: errorCode[createFamilyAccountError?.code as keyof typeof errorCode] || createFamilyAccountError?.code })
         setLoadingState(false)
         return false;
       }
@@ -59,7 +59,7 @@ export default function useContractWrite() {
   )
 
   const createProposal = useCallback(
-    async (familyId: number, description: string, amount: string, recipient: string) => {
+    async (familyId: number, description: string, amount: string, recipient: string, title: string, duration: string) => {
       setLoadingState(true)
 
       if (!account) {
@@ -89,7 +89,7 @@ export default function useContractWrite() {
       const proposedAmount = formatToBigInt(amount, 18)
 
       try {
-        const createdProposal = await contract?.createProposal(familyId, description, proposedAmount, recipient)
+        const createdProposal = await contract?.createProposal(familyId, title, description, proposedAmount, recipient, (new Date(duration).getTime() / 1000))
         const createdProposalReceipt = await createdProposal.wait();
 
         toast({
@@ -100,7 +100,7 @@ export default function useContractWrite() {
         setLoadingState(false)
         return true
       } catch (createProposalError: {} | any) {
-        toast({ variant: "error", description: errorCode[createProposalError?.code as keyof typeof errorCode] })
+        toast({ variant: "error", description: errorCode[createProposalError?.code as keyof typeof errorCode] || createProposalError?.code })
         setLoadingState(false)
         return false;
       }
@@ -108,7 +108,7 @@ export default function useContractWrite() {
   )
 
   const addFamilyMember = useCallback(
-    async (familyId: number, memberAddress: string, memberName: string) => {
+    async (familyId: number, memberAddress: string, memberName: string, personIsParent: boolean) => {
       setLoadingState(true)
 
       if (!account) {
@@ -130,7 +130,7 @@ export default function useContractWrite() {
       }
       
       try {
-        const addedMember = await contract?.addMember(familyId, memberAddress, memberName)
+        const addedMember = await contract?.addMember(familyId, memberAddress, memberName, personIsParent)
         const addedMemberReceipt = await addedMember.wait()
 
         toast({
@@ -141,7 +141,36 @@ export default function useContractWrite() {
         setLoadingState(false)
         return true;
       } catch (addFamilyMemberError: {} | any) {
-        toast({ variant: "error", description: errorCode[addFamilyMemberError?.code as keyof typeof errorCode] })
+        toast({ variant: "error", description: errorCode[addFamilyMemberError?.code as keyof typeof errorCode] || addFamilyMemberError?.code })
+        setLoadingState(false)
+        return false;
+      }
+    }, [account, contract, explorerURL, setLoadingState]
+  )
+
+  const deleteFamilyAccount = useCallback(
+    async (familyId: number) => {
+      setLoadingState(true)
+
+      if (!account) {
+        toast({ variant: "error", description: "No connected wallet!" })
+        setLoadingState(false)
+        return false
+      }
+      
+      try {
+        const deletedFamily = await contract?.deleteFamily(familyId)
+        const deletedFamilyReceipt = await deletedFamily.wait()
+
+        toast({
+          variant: "success",
+          description: `Family account successfully deleted!`,
+          action: { url: `${explorerURL}/tx/${deletedFamilyReceipt?.hash || deletedFamilyReceipt?.transactionHash}`, label: "View in explorer" }
+        })
+        setLoadingState(false)
+        return true;
+      } catch (deleteFamilyAccountError: {} | any) {
+        toast({ variant: "error", description: errorCode[deleteFamilyAccountError?.code as keyof typeof errorCode] || deleteFamilyAccountError?.code })
         setLoadingState(false)
         return false;
       }
@@ -151,6 +180,7 @@ export default function useContractWrite() {
   return {
     createFamilyAccount,
     createProposal,
-    addFamilyMember
+    addFamilyMember,
+    deleteFamilyAccount
   };
 }

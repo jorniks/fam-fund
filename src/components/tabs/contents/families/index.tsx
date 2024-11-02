@@ -32,7 +32,7 @@ const Families = (
   const [openRemoveMember, setOpenRemoveMember] = useState<boolean>(false)
   const [familyName, setFamilyName] = useState<string>('')
   const [personName, setPersonName] = useState<string>('')
-
+  
   return (
     <>
       <section className="mb-6">

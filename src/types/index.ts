@@ -1,25 +1,46 @@
 
 export type FamilyType = {
   name: string,
-  familyAddress: string,
-  proposalCount: number,
-  creationDate: number,
-  memberCount: number,
+  creator: string,
   creatorName: string,
-  creator: string
+  familyAddress: string,
+  creationDate: number,
+  walletBalance: number,
+  members: FamilyMember[],
+  proposals: FamilyProposals[],
+  thresholdValues: ThresholdValues[]
 }
 
-export type FamilyMemberType = {
+export type FamilyMember ={
   name: string,
-  address: string
+  addr: string,
+  role: string
 }
 
-export type ProposalType = {
+export type FamilyProposals = {
   proposer: string,
+  proposerName: string,
+  title: string,
   description: string,
   amount: number,
   recipient: string,
   votesFor: number,
   votesAgainst: number,
+  endDate: number,
+  allowedVoters: string,
+  forPercentage: number,
+  againstPercentage: number,
+  status: string,
   executed: boolean
+}
+
+export type ThresholdValues = {
+  lowAmount: number,
+  mediumAmount: number,
+  highAmount: number
+}
+
+export type FamilyMemberType = {
+  name: string,
+  string: string
 }

@@ -18,6 +18,7 @@ import { Button } from '@/components/button';
 import Link from 'next/link';
 import { CHAIN_INFO } from '@/lib/services/chain-config';
 import { switchNetwork } from '@/lib/wallet/connector';
+import { copyToClipboard } from '@/functions/misc-functions';
 
 
 const ConnectedWalletButton = () => {
@@ -28,15 +29,6 @@ const ConnectedWalletButton = () => {
     "ConnectionType"
   ) as keyof typeof ConnectionType;
   const disconnectWallet = useDisconnectFromWallet(setOpen);
-
-
-  const copyToClipboard = () => {
-    if (account) {
-      navigator.clipboard.writeText(account);
-      setAddressCopied(true);
-      setTimeout(() => setAddressCopied(false), 1000);
-    }
-  };
 
   useEffect(() => {
     if (isActive && chainId !== 1320) {
@@ -60,9 +52,9 @@ const ConnectedWalletButton = () => {
 
           <div className="py-4">
             {/* Network */}
-            <div className="py-3 bg-spray-900 rounded px-4 flex">
+            <div className="py-3 border-2 border-spray-600 rounded px-4 flex">
               <div className="my-auto">
-                <div className="text-sm text-gray-400 mb-1 font-regular">
+                <div className="text-sm text-gray-500 mb-1 font-regular">
                   Connected network
                 </div>
                 <div className="text-base font-medium">
@@ -74,7 +66,7 @@ const ConnectedWalletButton = () => {
             {/* Wallet */}
             <div className="pt-5">
               {/* Address */}
-              <div className="relative my-3 flex items-center justify-between border-spray-600 rounded-md border-2 p-1.5 pl-4">
+              <div className="relative my-3 flex items-center justify-between border-spray-600 rounded-lg border-2 p-1.5 pl-4">
                 <div className="">
                   <Image
                     src={`/img/${connectionType?.toLowerCase()}.svg`}
@@ -91,7 +83,7 @@ const ConnectedWalletButton = () => {
 
                 {/* Button to disconnect */}
                 <Button
-                  className="btn chestnut"
+                  className="btn chestnut px-4"
                   onClick={disconnectWallet}
                 >
                   Disconnect
@@ -109,7 +101,7 @@ const ConnectedWalletButton = () => {
                 >
                   <span className="">View in explorer</span>
                   <svg
-                    className=" inline ml-[8px] fill-white"
+                    className=" inline ml-[8px] fill-black"
                     width="15"
                     height="15"
                     viewBox="0 0 19 19"
@@ -122,7 +114,12 @@ const ConnectedWalletButton = () => {
 
                 <div
                   className="space-x-1 cursor-pointer flex items-center"
-                  onClick={copyToClipboard}
+                  onClick={() => {
+                    copyToClipboard(account).then(() => {
+                      setAddressCopied(true);
+                      setTimeout(() => setAddressCopied(false), 1000);
+                    })
+                  }}
                 >
                   <span className="">Copy Address</span>
                   {!addressCopied ? (

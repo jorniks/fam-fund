@@ -45,3 +45,8 @@ export const truncateValue = (valueToTruncate: any, decimalPlaces: number) => {
 export const convertToDecimalValue = (SCValue: any, tokenDecimal: number) => {
   return SCValue / Math.pow(10, Number(tokenDecimal));
 };
+
+export const copyToClipboard = async (textToCopy: any) => {
+  navigator.clipboard.writeText(textToCopy);
+  return true;
+};
