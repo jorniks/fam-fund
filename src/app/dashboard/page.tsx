@@ -9,45 +9,38 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/dialog"
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/accordion"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/tabs"
 import useContractWrite from "@/hooks/write-hooks/useContractWrite";
-import { useState } from "react";
-
+import { useCallback, useEffect, useState } from "react";
+import Families from "@/components/tabs/contents/families";
+import Proposals from "@/components/tabs/contents/proposals";
+import useContractRead from '@/hooks/read-hooks/useContractRead';
+import { FamilyMemberType, FamilyType } from "@/types";
+import { useWeb3React } from "@web3-react/core";
+import { formatNumberScale } from "@/functions/format";
 
 export default function Home() {
-  const { createFamilyAccount, createProposal, addFamilyMember } = useContractWrite();
+  const { account } = useWeb3React()
+  const { addFamilyMember } = useContractWrite();
+  const { getUserFamilies } = useContractRead()
+  const [listOfFamilies, setListOfFamilies] = useState<FamilyType[]>([])
+  const [familyMembers, setFamilyMembers] = useState<FamilyMemberType[]>([])
   const [openNewMember, setOpenNewMember] = useState<boolean>(false)
-  const [openNewFamily, setOpenNewFamily] = useState<boolean>(false)
-  const [openNewProposal, setOpenNewProposal] = useState<boolean>(false)
   const [memberName, setMemberName] = useState<string>('')
   const [memberAddress, setAddressName] = useState<string>('')
-  const [proposalObj, setProposalObj] = useState({
-    recipient: "",
-    details: "",
-    amount: ""
-  })
+  const activeFamily = 0;
 
-
-  const fillProposalForm = (e: any) => {
-    if (e.target.id == 'amount') {
-      if (Number(e.target.value) > -1 || e.target.value === '') {
-        setProposalObj(prevState => ({ ...prevState, [e.target.id]: e.target.value }))
+  const loadData = useCallback(
+    () => {
+      if (account) {
+        getUserFamilies().then(setListOfFamilies)
       }
+    }, [account, getUserFamilies],
+  )
 
-      return
-    }
-
-    setProposalObj(prevState => ({
-      ...prevState,
-      [e.target.id]: e.target.value
-    }))
-  }
+  useEffect(() => {
+    loadData()
+  }, [loadData])
 
 
   return (
@@ -60,8 +53,8 @@ export default function Home() {
             </div>
 
             <div className="text-xs">
-              <h6 className="text-lg font-semibold">Family of Love</h6>
-              <span className="">3 Family members</span>
+              <h6 className="text-lg font-semibold">{ listOfFamilies[activeFamily]?.name }&apos;s Family</h6>
+              <span className="">{ formatNumberScale(listOfFamilies[activeFamily]?.memberCount || 0) } Family members</span>
             </div>
           </div>
           
@@ -99,11 +92,12 @@ export default function Home() {
                   </div>
 
                   <Button className="btn w-full sm:w-1/2 chestnut h-14" onClick={() => {
-                    addFamilyMember(0, memberAddress, memberName).then(response => {
+                    addFamilyMember(activeFamily, memberAddress, memberName).then(response => {
                       if (response == true) {
                         setMemberName('')
                         setAddressName('')
                         setOpenNewMember(false);
+                        getUserFamilies().then(setListOfFamilies)
                       }
                     })
                   }}>Add Family Member</Button>
@@ -116,7 +110,7 @@ export default function Home() {
       </section>
 
       <section className="">
-        <Tabs defaultValue="family" className="w-full space-y-6">
+        <Tabs defaultValue="proposal" className="w-full space-y-6">
           <TabsList className="w-full">
             <div className="container">
               <TabsTrigger className="pr-4" value="family">My Families</TabsTrigger>
@@ -125,153 +119,16 @@ export default function Home() {
           </TabsList>
 
           <TabsContent value="family">
-            <section className="mb-6">
-              <Dialog open={openNewFamily} onOpenChange={setOpenNewFamily}>
-                <DialogTrigger className="btn px-6 spray-dark text-sm">
-                  <i className="bi bi-plus-lg"></i> New Family
-                </DialogTrigger>
-
-                <DialogContent className="max-w-lg w-full bg-white border-0">
-                  <DialogHeader>
-                    <DialogTitle>Create Spending Proposal</DialogTitle>
-
-                    <DialogDescription>
-                      This action will create a spending proposal for your family members to consider
-                    </DialogDescription>
-                  </DialogHeader>
-
-                  <section className="space-y-4 mt-6 pb-4">
-                    <div className="space-y-1">
-                      <label htmlFor="amount" className="block text-sm/6 font-medium">Proposed Spend Amount</label>
-                      <input id="amount" type="text" className="text-box" value={proposalObj.amount} onChange={fillProposalForm} />
-                    </div>
-
-                    <div className="space-y-1">
-                      <label htmlFor="recipient" className="block text-sm/6 font-medium">Wallet Address To Receive Funds</label>
-                      <input id="recipient" type="text" className="text-box" value={proposalObj.recipient} onChange={fillProposalForm} />
-                    </div>
-
-                    <div className="space-y-1">
-                      <label htmlFor="details" className="block text-sm/6 font-medium">Proposal Description</label>
-                      <textarea id="details" className="text-box" onChange={fillProposalForm}>{proposalObj.details}</textarea>
-                    </div>
-
-                    <Button className="btn w-full sm:w-1/2 chestnut h-14" onClick={() => {
-                      createProposal(0, proposalObj.details, proposalObj.amount, proposalObj.recipient).then(response => {
-                        if (response == true) {
-                          setProposalObj({
-                            recipient: "",
-                            details: "",
-                            amount: ""
-                          })
-                          setOpenNewProposal(false);
-                        }
-                      })
-                    }}>Submit Proposal</Button>
-                  </section>
-
-                </DialogContent>
-              </Dialog>
-            </section>
-
-            <section className="w-full max-w-3xl">
-              <Accordion type="single" collapsible>
-                <AccordionItem value="item-1">
-                  <AccordionTrigger className="bg-white rounded-md p-5 text-lg">Family Name</AccordionTrigger>
-
-                  <AccordionContent className="bg-gray-50 p-6 rounded-b-md">
-                    List of family members
-                  </AccordionContent>
-                </AccordionItem>
-              </Accordion>
-            </section>
+            <Families
+              listOfFamilies={listOfFamilies}
+              familyMembers={familyMembers}
+            />
           </TabsContent>
 
           <TabsContent value="proposal">
-            <section className="mb-6">
-              <Dialog open={openNewProposal} onOpenChange={setOpenNewProposal}>
-                <DialogTrigger className="btn px-6 spray-dark text-sm">
-                  <i className="bi bi-plus-lg"></i> New Proposal
-                </DialogTrigger>
-
-                <DialogContent className="max-w-lg w-full bg-white border-0">
-                  <DialogHeader>
-                    <DialogTitle>Create Spending Proposal</DialogTitle>
-
-                    <DialogDescription>
-                      This action will create a spending proposal for your family members to consider
-                    </DialogDescription>
-                  </DialogHeader>
-
-                  <section className="space-y-4 mt-6 pb-4">
-                    <div className="space-y-1">
-                      <label htmlFor="amount" className="block text-sm/6 font-medium">Proposed Spend Amount</label>
-                      <input id="amount" type="text" className="text-box" value={proposalObj.amount} onChange={fillProposalForm} />
-                    </div>
-
-                    <div className="space-y-1">
-                      <label htmlFor="recipient" className="block text-sm/6 font-medium">Wallet Address To Receive Funds</label>
-                      <input id="recipient" type="text" className="text-box" value={proposalObj.recipient} onChange={fillProposalForm} />
-                    </div>
-
-                    <div className="space-y-1">
-                      <label htmlFor="details" className="block text-sm/6 font-medium">Proposal Description</label>
-                      <textarea id="details" className="text-box" onChange={fillProposalForm}>{proposalObj.details}</textarea>
-                    </div>
-
-                    <Button className="btn w-full sm:w-1/2 chestnut h-14" onClick={() => {
-                      createProposal(0, proposalObj.details, proposalObj.amount, proposalObj.recipient).then(response => {
-                        if (response == true) {
-                          setProposalObj({
-                            recipient: "",
-                            details: "",
-                            amount: ""
-                          })
-                          setOpenNewProposal(false);
-                        }
-                      })
-                    }}>Submit Proposal</Button>
-                  </section>
-
-                </DialogContent>
-              </Dialog>
-            </section>
-
-            <section className="grid grid-cols-1 md:grid-cols-10 gap-4">
-              <dl className="md:col-span-2 divide-y border hover:shadow-sm duration-500 bg-white rounded flex flex-col">
-                <div className="p-4 flex-1">
-                  <dt className="mb-6 flex items-center justify-between">
-                    <span className="rounded-full bg-amber-100 px-4 py-2 text-sm font-medium text-amber-700">Miracle</span>
-                    <i className="bi bi-three-dots-vertical"></i>
-                  </dt>
-
-                  <dd className="text-sm mt-3">
-                    Lorem, ipsum dolor sit amet consectetur adipisicing elit. Iste sit rerum obcaecati. Dicta rerum, neque voluptate non at, commodi laborum quia labore voluptatem asperiores a natus? Quod fuga fugiat perspiciatis?
-                  </dd>
-                </div>
-
-                <div className="p-4">
-                  frerger
-                </div>
-              </dl>
-              
-              <dl className="md:col-span-2 divide-y border hover:shadow-sm duration-500 bg-white rounded flex flex-col">
-                <div className="p-4 flex-1">
-                  <dt className="mb-6 flex items-center justify-between">
-                    <span className="rounded-full bg-amber-100 px-4 py-2 text-sm font-medium text-amber-700">Miracle</span>
-                    <i className="bi bi-three-dots-vertical"></i>
-                  </dt>
-
-                  <dd className="text-sm mt-3">
-                    Dicta rerum, neque voluptate non at, commodi laborum quia labore voluptatem asperiores a natus? Quod fuga fugiat perspiciatis?
-                  </dd>
-                </div>
-
-                <div className="p-4">
-                  frerger
-                </div>
-              </dl>
-            </section>
+            <Proposals
+              activeFamily={activeFamily}
+            />
           </TabsContent>
         </Tabs>
       </section>

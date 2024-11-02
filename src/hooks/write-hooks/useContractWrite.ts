@@ -104,7 +104,7 @@ export default function useContractWrite() {
         setLoadingState(false)
         return false;
       }
-    }, []
+    }, [account, contract, explorerURL, setLoadingState]
   )
 
   const addFamilyMember = useCallback(
@@ -145,7 +145,7 @@ export default function useContractWrite() {
         setLoadingState(false)
         return false;
       }
-    }, []
+    }, [account, contract, explorerURL, setLoadingState]
   )
   
   return {
