@@ -27,7 +27,7 @@ export type FamilyProposals = {
   votesFor: number,
   votesAgainst: number,
   endDate: number,
-  allowedVoters: string,
+  allowedVoters: [],
   forPercentage: number,
   againstPercentage: number,
   status: string,

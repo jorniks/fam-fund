@@ -66,7 +66,7 @@ export default function Home() {
               ))}
 
               {listOfFamilies[activeFamily]?.members?.length > 3 &&
-                <div className="flex items-center justify-center font-medium text-xs h-10 w-10 bg-green-400 rounded-full ring-2 ring-white">+{listOfFamilies[activeFamily]?.members?.length - 3}</div>
+                <div className="flex items-center justify-center font-medium text-xs h-10 w-10 bg-green-200 border-2 border-green-600 rounded-full ring-2 ring-white">+{listOfFamilies[activeFamily]?.members?.length - 3}</div>
               }
             </div>
 
@@ -141,6 +141,7 @@ export default function Home() {
 
           <TabsContent value="proposal">
             <Proposals
+              familyProposals={listOfFamilies[activeFamily]?.proposals}
               activeFamily={activeFamily}
             />
           </TabsContent>

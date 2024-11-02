@@ -176,11 +176,101 @@ export default function useContractWrite() {
       }
     }, [account, contract, explorerURL, setLoadingState]
   )
+
+  const castVote = useCallback(
+    async (familyId: number, proposalId: number, inFavor: boolean) => {
+      setLoadingState(true)
+
+      if (!account) {
+        toast({ variant: "error", description: "No connected wallet!" })
+        setLoadingState(false)
+        return false
+      }
+      
+      try {
+        const castedVote = await contract?.vote(familyId, proposalId, inFavor)
+        const castedVoteReceipt = await castedVote.wait()
+
+        toast({
+          variant: "success",
+          description: `Vote successfully saved!`,
+          action: { url: `${explorerURL}/tx/${castedVoteReceipt?.hash || castedVoteReceipt?.transactionHash}`, label: "View in explorer" }
+        })
+        setLoadingState(false)
+        return true;
+      } catch (castVoteError: {} | any) {
+        toast({ variant: "error", description: errorCode[castVoteError?.code as keyof typeof errorCode] || castVoteError?.code })
+        setLoadingState(false)
+        return false;
+      }
+    }, [account, contract, explorerURL, setLoadingState]
+  )
+
+  const claimFunds = useCallback(
+    async (familyId: number, proposalId: number) => {
+      setLoadingState(true)
+
+      if (!account) {
+        toast({ variant: "error", description: "No connected wallet!" })
+        setLoadingState(false)
+        return false
+      }
+      
+      try {
+        const claimedFund = await contract?.claimFunds(familyId, proposalId)
+        const claimedFundReceipt = await claimedFund.wait()
+
+        toast({
+          variant: "success",
+          description: `Funds withdrawn successfully!`,
+          action: { url: `${explorerURL}/tx/${claimedFundReceipt?.hash || claimedFundReceipt?.transactionHash}`, label: "View in explorer" }
+        })
+        setLoadingState(false)
+        return true;
+      } catch (claimFundsError: {} | any) {
+        toast({ variant: "error", description: errorCode[claimFundsError?.code as keyof typeof errorCode] || claimFundsError?.code })
+        setLoadingState(false)
+        return false;
+      }
+    }, [account, contract, explorerURL, setLoadingState]
+  )
+
+  const vetoProposal = useCallback(
+    async (familyId: number, proposalId: number, approvalStatus: string) => {
+      setLoadingState(true)
+
+      if (!account) {
+        toast({ variant: "error", description: "No connected wallet!" })
+        setLoadingState(false)
+        return false
+      }
+      
+      try {
+        const vetodProposal = await contract?.vetoProposal(familyId, proposalId, approvalStatus)
+        const vetodProposalReceipt = await vetodProposal.wait()
+
+        toast({
+          variant: "success",
+          description: `Veto action successfully executed!`,
+          action: { url: `${explorerURL}/tx/${vetodProposalReceipt?.hash || vetodProposalReceipt?.transactionHash}`, label: "View in explorer" }
+        })
+        setLoadingState(false)
+        return true;
+      } catch (vetoProposalError: {} | any) {
+        toast({ variant: "error", description: errorCode[vetoProposalError?.code as keyof typeof errorCode] || vetoProposalError?.code })
+        setLoadingState(false)
+        return false;
+      }
+    }, [account, contract, explorerURL, setLoadingState]
+  )
   
   return {
     createFamilyAccount,
     createProposal,
     addFamilyMember,
-    deleteFamilyAccount
+    deleteFamilyAccount,
+    castVote,
+    claimFunds,
+    vetoProposal
   };
 }
