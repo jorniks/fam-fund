@@ -8,7 +8,7 @@
     "anonymous": false,
     "inputs": [
       {
-        "indexed": false,
+        "indexed": true,
         "internalType": "uint256",
         "name": "familyId",
         "type": "uint256"
@@ -24,18 +24,6 @@
         "internalType": "address",
         "name": "creator",
         "type": "address"
-      },
-      {
-        "indexed": false,
-        "internalType": "string",
-        "name": "creatorName",
-        "type": "string"
-      },
-      {
-        "indexed": false,
-        "internalType": "address",
-        "name": "familyAddress",
-        "type": "address"
       }
     ],
     "name": "FamilyCreated",
@@ -45,7 +33,7 @@
     "anonymous": false,
     "inputs": [
       {
-        "indexed": false,
+        "indexed": true,
         "internalType": "uint256",
         "name": "familyId",
         "type": "uint256"
@@ -58,7 +46,119 @@
     "anonymous": false,
     "inputs": [
       {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "familyId",
+        "type": "uint256"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "member",
+        "type": "address"
+      },
+      {
         "indexed": false,
+        "internalType": "uint256",
+        "name": "amount",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "reason",
+        "type": "string"
+      }
+    ],
+    "name": "FamilyFundsDistributed",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "familyId",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "percentage",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "totalAmount",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "reason",
+        "type": "string"
+      }
+    ],
+    "name": "FamilyFundsWithdrawn",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "familyId",
+        "type": "uint256"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "member",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "amount",
+        "type": "uint256"
+      }
+    ],
+    "name": "FundsDistributed",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "familyId",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "amount",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "reason",
+        "type": "string"
+      }
+    ],
+    "name": "FundsWithdrawn",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
         "internalType": "uint256",
         "name": "familyId",
         "type": "uint256"
@@ -74,6 +174,12 @@
         "internalType": "string",
         "name": "name",
         "type": "string"
+      },
+      {
+        "indexed": false,
+        "internalType": "enum FamilyDao.Role",
+        "name": "role",
+        "type": "uint8"
       }
     ],
     "name": "MemberAdded",
@@ -83,7 +189,7 @@
     "anonymous": false,
     "inputs": [
       {
-        "indexed": false,
+        "indexed": true,
         "internalType": "uint256",
         "name": "familyId",
         "type": "uint256"
@@ -102,7 +208,7 @@
     "anonymous": false,
     "inputs": [
       {
-        "indexed": false,
+        "indexed": true,
         "internalType": "uint256",
         "name": "familyId",
         "type": "uint256"
@@ -127,7 +233,7 @@
     "anonymous": false,
     "inputs": [
       {
-        "indexed": false,
+        "indexed": true,
         "internalType": "uint256",
         "name": "familyId",
         "type": "uint256"
@@ -136,24 +242,6 @@
         "indexed": false,
         "internalType": "uint256",
         "name": "proposalId",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "address",
-        "name": "proposer",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "internalType": "string",
-        "name": "description",
-        "type": "string"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "amount",
         "type": "uint256"
       }
     ],
@@ -164,7 +252,7 @@
     "anonymous": false,
     "inputs": [
       {
-        "indexed": false,
+        "indexed": true,
         "internalType": "uint256",
         "name": "familyId",
         "type": "uint256"
@@ -174,6 +262,12 @@
         "internalType": "uint256",
         "name": "proposalId",
         "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "enum FamilyDao.ProposalStatus",
+        "name": "status",
+        "type": "uint8"
       }
     ],
     "name": "ProposalExecuted",
@@ -183,7 +277,38 @@
     "anonymous": false,
     "inputs": [
       {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "familyId",
+        "type": "uint256"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "recipient",
+        "type": "address"
+      },
+      {
         "indexed": false,
+        "internalType": "uint256",
+        "name": "amount",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "reason",
+        "type": "string"
+      }
+    ],
+    "name": "TransferFailed",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
         "internalType": "uint256",
         "name": "familyId",
         "type": "uint256"
@@ -249,6 +374,24 @@
   {
     "inputs": [
       {
+        "internalType": "uint256",
+        "name": "_familyId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_proposalId",
+        "type": "uint256"
+      }
+    ],
+    "name": "claimFunds",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
         "internalType": "string",
         "name": "_familyName",
         "type": "string"
@@ -279,6 +422,11 @@
       },
       {
         "internalType": "string",
+        "name": "_title",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
         "name": "_description",
         "type": "string"
       },
@@ -291,6 +439,11 @@
         "internalType": "address",
         "name": "_recipient",
         "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_duration",
+        "type": "uint256"
       }
     ],
     "name": "createProposal",
@@ -352,6 +505,28 @@
         "type": "uint256"
       },
       {
+        "components": [
+          {
+            "internalType": "uint256",
+            "name": "lowAmount",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "mediumAmount",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "highAmount",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct FamilyDao.ThresholdValues",
+        "name": "thresholdValues",
+        "type": "tuple"
+      },
+      {
         "internalType": "bool",
         "name": "exists",
         "type": "bool"
@@ -400,6 +575,30 @@
         "type": "uint256"
       },
       {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "name": "familyMembership",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      },
+      {
         "internalType": "uint256",
         "name": "",
         "type": "uint256"
@@ -411,6 +610,16 @@
         "internalType": "address",
         "name": "proposer",
         "type": "address"
+      },
+      {
+        "internalType": "string",
+        "name": "proposerName",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "title",
+        "type": "string"
       },
       {
         "internalType": "string",
@@ -438,6 +647,26 @@
         "type": "uint256"
       },
       {
+        "internalType": "uint256",
+        "name": "endDate",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "forPercentage",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "againstPercentage",
+        "type": "uint256"
+      },
+      {
+        "internalType": "enum FamilyDao.ProposalStatus",
+        "name": "status",
+        "type": "uint8"
+      },
+      {
         "internalType": "bool",
         "name": "executed",
         "type": "bool"
@@ -454,17 +683,12 @@
         "type": "uint256"
       }
     ],
-    "name": "getFamilyMembers",
+    "name": "getParentCount",
     "outputs": [
       {
-        "internalType": "address[]",
+        "internalType": "uint256",
         "name": "",
-        "type": "address[]"
-      },
-      {
-        "internalType": "string[]",
-        "name": "",
-        "type": "string[]"
+        "type": "uint256"
       }
     ],
     "stateMutability": "view",
@@ -476,51 +700,19 @@
         "internalType": "uint256",
         "name": "_familyId",
         "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_amount",
+        "type": "uint256"
       }
     ],
-    "name": "getFamilyProposals",
+    "name": "getRequiredApprovalPercentage",
     "outputs": [
       {
-        "components": [
-          {
-            "internalType": "address",
-            "name": "proposer",
-            "type": "address"
-          },
-          {
-            "internalType": "string",
-            "name": "description",
-            "type": "string"
-          },
-          {
-            "internalType": "uint256",
-            "name": "amount",
-            "type": "uint256"
-          },
-          {
-            "internalType": "address",
-            "name": "recipient",
-            "type": "address"
-          },
-          {
-            "internalType": "uint256",
-            "name": "votesFor",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "votesAgainst",
-            "type": "uint256"
-          },
-          {
-            "internalType": "bool",
-            "name": "executed",
-            "type": "bool"
-          }
-        ],
-        "internalType": "struct FamilyDao.SimplifiedProposal[]",
+        "internalType": "uint256",
         "name": "",
-        "type": "tuple[]"
+        "type": "uint256"
       }
     ],
     "stateMutability": "view",
@@ -553,48 +745,140 @@
             "type": "address"
           },
           {
-            "internalType": "uint256",
-            "name": "memberCount",
-            "type": "uint256"
+            "components": [
+              {
+                "internalType": "string",
+                "name": "name",
+                "type": "string"
+              },
+              {
+                "internalType": "address",
+                "name": "addr",
+                "type": "address"
+              },
+              {
+                "internalType": "enum FamilyDao.Role",
+                "name": "role",
+                "type": "uint8"
+              }
+            ],
+            "internalType": "struct FamilyDao.Member[]",
+            "name": "members",
+            "type": "tuple[]"
           },
           {
-            "internalType": "uint256",
-            "name": "proposalCount",
-            "type": "uint256"
+            "components": [
+              {
+                "internalType": "address",
+                "name": "proposer",
+                "type": "address"
+              },
+              {
+                "internalType": "string",
+                "name": "proposerName",
+                "type": "string"
+              },
+              {
+                "internalType": "string",
+                "name": "title",
+                "type": "string"
+              },
+              {
+                "internalType": "string",
+                "name": "description",
+                "type": "string"
+              },
+              {
+                "internalType": "uint256",
+                "name": "amount",
+                "type": "uint256"
+              },
+              {
+                "internalType": "address",
+                "name": "recipient",
+                "type": "address"
+              },
+              {
+                "internalType": "uint256",
+                "name": "votesFor",
+                "type": "uint256"
+              },
+              {
+                "internalType": "uint256",
+                "name": "votesAgainst",
+                "type": "uint256"
+              },
+              {
+                "internalType": "uint256",
+                "name": "endDate",
+                "type": "uint256"
+              },
+              {
+                "internalType": "address[]",
+                "name": "allowedVoters",
+                "type": "address[]"
+              },
+              {
+                "internalType": "uint256",
+                "name": "forPercentage",
+                "type": "uint256"
+              },
+              {
+                "internalType": "uint256",
+                "name": "againstPercentage",
+                "type": "uint256"
+              },
+              {
+                "internalType": "enum FamilyDao.ProposalStatus",
+                "name": "status",
+                "type": "uint8"
+              },
+              {
+                "internalType": "bool",
+                "name": "executed",
+                "type": "bool"
+              }
+            ],
+            "internalType": "struct FamilyDao.ProposalView[]",
+            "name": "proposals",
+            "type": "tuple[]"
           },
           {
             "internalType": "uint256",
             "name": "creationDate",
+            "type": "uint256"
+          },
+          {
+            "components": [
+              {
+                "internalType": "uint256",
+                "name": "lowAmount",
+                "type": "uint256"
+              },
+              {
+                "internalType": "uint256",
+                "name": "mediumAmount",
+                "type": "uint256"
+              },
+              {
+                "internalType": "uint256",
+                "name": "highAmount",
+                "type": "uint256"
+              }
+            ],
+            "internalType": "struct FamilyDao.ThresholdValues",
+            "name": "thresholdValues",
+            "type": "tuple"
+          },
+          {
+            "internalType": "uint256",
+            "name": "walletBalance",
             "type": "uint256"
           }
         ],
         "internalType": "struct FamilyDao.FamilyDetails[]",
         "name": "",
         "type": "tuple[]"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "_familyId",
-        "type": "uint256"
-      },
-      {
-        "internalType": "address",
-        "name": "_member",
-        "type": "address"
-      }
-    ],
-    "name": "isMember",
-    "outputs": [
-      {
-        "internalType": "bool",
-        "name": "",
-        "type": "bool"
       }
     ],
     "stateMutability": "view",
@@ -644,6 +928,34 @@
   {
     "inputs": [
       {
+        "internalType": "uint256",
+        "name": "_familyId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_lowAmount",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_mediumAmount",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_highAmount",
+        "type": "uint256"
+      }
+    ],
+    "name": "setThresholdValues",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
         "internalType": "address",
         "name": "",
         "type": "address"
@@ -676,6 +988,11 @@
         "internalType": "uint256",
         "name": "_proposalId",
         "type": "uint256"
+      },
+      {
+        "internalType": "enum FamilyDao.ProposalStatus",
+        "name": "_status",
+        "type": "uint8"
       }
     ],
     "name": "vetoProposal",
@@ -702,6 +1019,29 @@
       }
     ],
     "name": "vote",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_familyId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_percentage",
+        "type": "uint256"
+      },
+      {
+        "internalType": "string",
+        "name": "_reason",
+        "type": "string"
+      }
+    ],
+    "name": "withdrawFamilyFunds",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
