@@ -1,3 +1,4 @@
+import { errorCode } from "@/lib/metamask-error-codes";
 
 export const calculateTimeLeft = (timestamp: number) => {
   let difference = timestamp * 1000 - Date.now();
@@ -49,4 +50,29 @@ export const convertToDecimalValue = (SCValue: any, tokenDecimal: number) => {
 export const copyToClipboard = async (textToCopy: any) => {
   navigator.clipboard.writeText(textToCopy);
   return true;
+};
+
+export const extractErrorMessage = (error: any) => {
+  // Check for specific contract revert error
+  if (error?.data?.message) {
+    return error.data.message;
+  }
+  
+  // Check for error message in the error object
+  if (error?.message) {
+    // Look for the revert reason in the error message
+    const match = error.message.match(/reason="([^"]+)"/);
+    if (match) {
+      return match[1];
+    }
+    
+    // If the error message is in a different format
+    const match2 = error.message.match(/execution reverted: (.*?)(?:\n|$)/);
+    if (match2) {
+      return match2[1];
+    }
+  }
+  
+  // Fallback to MetaMask error codes
+  return errorCode[error?.code as keyof typeof errorCode] || error?.code || "Transaction failed";
 };

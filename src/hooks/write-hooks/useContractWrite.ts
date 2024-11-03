@@ -4,10 +4,10 @@ import { useContract } from "../services/useContract";
 import { useSetRecoilState } from "recoil";
 import { loadingState } from "@/app/state/atoms/atom";
 import { toast } from "@/components/toaster/use-toast";
-import { errorCode } from "@/lib/metamask-error-codes";
 import { CHAIN_INFO } from "@/lib/services/chain-config";
 import { isAddress } from "ethers";
 import { formatToBigInt } from "@/functions/format";
+import { extractErrorMessage } from "@/functions/misc-functions";
 
 export default function useContractWrite() {
   const { account, chainId } = useWeb3React();
@@ -49,7 +49,8 @@ export default function useContractWrite() {
         setLoadingState(false)
         return true;
       } catch (createFamilyAccountError: {} | any) {
-        toast({ variant: "error", description: errorCode[createFamilyAccountError?.code as keyof typeof errorCode] || createFamilyAccountError?.code })
+        const errorMessage = extractErrorMessage(createFamilyAccountError);
+        toast({ variant: "error", description: errorMessage })
         setLoadingState(false)
         return false;
       }
@@ -100,7 +101,8 @@ export default function useContractWrite() {
         setLoadingState(false)
         return true
       } catch (createProposalError: {} | any) {
-        toast({ variant: "error", description: errorCode[createProposalError?.code as keyof typeof errorCode] || createProposalError?.code })
+        const errorMessage = extractErrorMessage(createProposalError);
+        toast({ variant: "error", description: errorMessage })
         setLoadingState(false)
         return false;
       }
@@ -141,7 +143,8 @@ export default function useContractWrite() {
         setLoadingState(false)
         return true;
       } catch (addFamilyMemberError: {} | any) {
-        toast({ variant: "error", description: errorCode[addFamilyMemberError?.code as keyof typeof errorCode] || addFamilyMemberError?.code })
+        const errorMessage = extractErrorMessage(addFamilyMemberError);
+        toast({ variant: "error", description: errorMessage })
         setLoadingState(false)
         return false;
       }
@@ -170,7 +173,8 @@ export default function useContractWrite() {
         setLoadingState(false)
         return true;
       } catch (removeFamilyMemberError: {} | any) {
-        toast({ variant: "error", description: errorCode[removeFamilyMemberError?.code as keyof typeof errorCode] || removeFamilyMemberError?.code })
+        const errorMessage = extractErrorMessage(removeFamilyMemberError);
+        toast({ variant: "error", description: errorMessage })
         setLoadingState(false)
         return false;
       }
@@ -199,7 +203,8 @@ export default function useContractWrite() {
         setLoadingState(false)
         return true;
       } catch (castVoteError: {} | any) {
-        toast({ variant: "error", description: errorCode[castVoteError?.code as keyof typeof errorCode] || castVoteError?.code })
+        const errorMessage = extractErrorMessage(castVoteError);
+        toast({ variant: "error", description: errorMessage })
         setLoadingState(false)
         return false;
       }
@@ -228,7 +233,8 @@ export default function useContractWrite() {
         setLoadingState(false)
         return true;
       } catch (claimFundsError: {} | any) {
-        toast({ variant: "error", description: errorCode[claimFundsError?.code as keyof typeof errorCode] || claimFundsError?.code })
+        const errorMessage = extractErrorMessage(claimFundsError);
+        toast({ variant: "error", description: errorMessage })
         setLoadingState(false)
         return false;
       }
@@ -257,7 +263,8 @@ export default function useContractWrite() {
         setLoadingState(false)
         return true;
       } catch (vetoProposalError: {} | any) {
-        toast({ variant: "error", description: errorCode[vetoProposalError?.code as keyof typeof errorCode] || vetoProposalError?.code })
+        const errorMessage = extractErrorMessage(vetoProposalError);
+        toast({ variant: "error", description: errorMessage })
         setLoadingState(false)
         return false;
       }
