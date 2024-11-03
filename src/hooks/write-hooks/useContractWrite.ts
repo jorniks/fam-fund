@@ -148,8 +148,8 @@ export default function useContractWrite() {
     }, [account, contract, explorerURL, setLoadingState]
   )
 
-  const deleteFamilyAccount = useCallback(
-    async (familyId: number) => {
+  const removeFamilyMember = useCallback(
+    async (familyId: number, memberAddress: string) => {
       setLoadingState(true)
 
       if (!account) {
@@ -159,18 +159,18 @@ export default function useContractWrite() {
       }
       
       try {
-        const deletedFamily = await contract?.deleteFamily(familyId)
-        const deletedFamilyReceipt = await deletedFamily.wait()
+        const removedFamily = await contract?.removeMember(familyId, memberAddress)
+        const removedFamilyReceipt = await removedFamily.wait()
 
         toast({
           variant: "success",
-          description: `Family account successfully deleted!`,
-          action: { url: `${explorerURL}/tx/${deletedFamilyReceipt?.hash || deletedFamilyReceipt?.transactionHash}`, label: "View in explorer" }
+          description: `Family member successfully removed!`,
+          action: { url: `${explorerURL}/tx/${removedFamilyReceipt?.hash || removedFamilyReceipt?.transactionHash}`, label: "View in explorer" }
         })
         setLoadingState(false)
         return true;
-      } catch (deleteFamilyAccountError: {} | any) {
-        toast({ variant: "error", description: errorCode[deleteFamilyAccountError?.code as keyof typeof errorCode] || deleteFamilyAccountError?.code })
+      } catch (removeFamilyMemberError: {} | any) {
+        toast({ variant: "error", description: errorCode[removeFamilyMemberError?.code as keyof typeof errorCode] || removeFamilyMemberError?.code })
         setLoadingState(false)
         return false;
       }
@@ -268,7 +268,7 @@ export default function useContractWrite() {
     createFamilyAccount,
     createProposal,
     addFamilyMember,
-    deleteFamilyAccount,
+    removeFamilyMember,
     castVote,
     claimFunds,
     vetoProposal

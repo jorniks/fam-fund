@@ -17,19 +17,15 @@ import {
 } from "@/components/accordion"
 import useContractWrite from "@/hooks/write-hooks/useContractWrite";
 import { FamilyType } from "@/types";
-import { shortenAddress } from "@/functions/format";
-import { copyToClipboard } from "@/functions/misc-functions";
-import { toast } from "@/components/toaster/use-toast";
+import MembersList from "./members-list";
 
 
 const Families = (
   { listOfFamilies, account }:
   { listOfFamilies: FamilyType[], account: string | undefined }
 ) => {
-  const { createFamilyAccount, deleteFamilyAccount } = useContractWrite();
+  const { createFamilyAccount } = useContractWrite();
   const [openNewFamily, setOpenNewFamily] = useState<boolean>(false)
-  const [openDeleteFamily, setOpenDeleteFamily] = useState<boolean>(false)
-  const [openRemoveMember, setOpenRemoveMember] = useState<boolean>(false)
   const [familyName, setFamilyName] = useState<string>('')
   const [personName, setPersonName] = useState<string>('')
   
@@ -109,48 +105,12 @@ const Families = (
                                   </thead>
 
                                   <tbody className="divide-y divide-gray-300">
-                                    {family.members?.map((member, index) => (
-                                      <tr className="text-sm font-medium" key={index}>
-                                        <td className="p-3 whitespace-nowrap">{member.name}</td>
-                                        <td className="p-3 whitespace-nowrap">
-                                          <span className="border-dotted border-b border-black cursor-copy" onClick={() => {
-                                            copyToClipboard(member.addr).then(() => toast({ variant: "success", description: "Address successfully copied!" }))
-                                          }}>{shortenAddress(member.addr)}</span>
-                                        </td>
-                                        <td className="p-3 whitespace-nowrap">{Number(member.role) === 1 ? 'Parent' : 'Child'}</td>
-
-                                        <td className=" p-3">
-                                          <Dialog open={openRemoveMember} onOpenChange={setOpenRemoveMember}>
-                                            <DialogTrigger className="text-chestnut-600 text-lg">
-                                              <i className="bi bi-trash3"></i>
-                                            </DialogTrigger>
-
-                                            <DialogContent className="max-w-md w-full bg-white border-0">
-                                              <DialogHeader>
-                                                <DialogTitle>Confirm Remove Family Member</DialogTitle>
-
-                                                <DialogDescription>
-                                                  This action will remove the user from this family.
-                                                </DialogDescription>
-                                              </DialogHeader>
-
-                                              <section className="space-y-8">
-                                                <div className="block text-sm font-medium">
-                                                  You can close this prompt if you don&apos;t wish to continue or click the button below to remove the user.
-                                                </div>
-
-                                                <Button className="btn w-full sm:w-1/2 chestnut h-14" onClick={() => {
-                                                  deleteFamilyAccount(index).then(response => {
-                                                    if (response == true) {
-                                                      setOpenRemoveMember(false);
-                                                    }
-                                                  })
-                                                }}>Yes, Remove Member</Button>
-                                              </section>
-                                            </DialogContent>
-                                          </Dialog>
-                                        </td>
-                                      </tr>
+                                    {family.memberList?.map((member, index) => (
+                                      <MembersList
+                                        key={index}
+                                        member={member}
+                                        familyId={family.familyId}
+                                      />
                                     ))}
                                   </tbody>
                                 </table>
@@ -178,36 +138,6 @@ const Families = (
                       <label className="block">Requires 100% vote or parent&apos;s approval to withdraw</label>
                     </div>
                   </section>
-                  
-                  <Dialog open={openDeleteFamily} onOpenChange={setOpenDeleteFamily}>
-                    <DialogTrigger className="btn px-6 chestnut text-sm">
-                      Delete Family Account
-                    </DialogTrigger>
-
-                    <DialogContent className="max-w-md w-full bg-white border-0">
-                      <DialogHeader>
-                        <DialogTitle>Confirm Delete Family Account</DialogTitle>
-
-                        <DialogDescription>
-                          This action will delete the family account and transfer all the remaining funds in the account to every member of the family.
-                        </DialogDescription>
-                      </DialogHeader>
-
-                      <section className="space-y-8">
-                        <div className="block text-sm font-medium">
-                          You can close this prompt if you don&apos;t wish to continue or click the button below to delete the account.
-                        </div>
-
-                        <Button className="btn w-full sm:w-1/2 chestnut h-14" onClick={() => {
-                          deleteFamilyAccount(index).then(response => {
-                            if (response == true) {
-                              setOpenDeleteFamily(false);
-                            }
-                          })
-                        }}>Yes, Delete Family</Button>
-                      </section>
-                    </DialogContent>
-                  </Dialog>
 
                 </AccordionContent>
               </AccordionItem>
