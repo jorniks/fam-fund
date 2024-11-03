@@ -53,7 +53,7 @@ export default function Home() {
     contract?.on('ProposalCreated', loadData)
     contract?.on('ProposalExecuted', loadData)
     contract?.on('FamilyCreated', loadData)
-    contract?.on('FundsTransferred', loadData)
+    contract?.on('ProposalVoted', loadData)
 
     return () => {
       contract?.removeAllListeners();
@@ -147,7 +147,7 @@ export default function Home() {
       </section>
 
       <section className="mb-40">
-        <Tabs defaultValue="proposal" className="w-full space-y-6">
+        <Tabs defaultValue={"proposal"} className="w-full space-y-6">
           <TabsList className="w-full">
             <div className="container">
               <TabsTrigger className="pr-4" value="family">My Families</TabsTrigger>
