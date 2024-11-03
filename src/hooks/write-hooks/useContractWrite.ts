@@ -130,7 +130,7 @@ export default function useContractWrite() {
       }
       
       try {
-        const addedMember = await contract?.addMember(familyId, memberAddress, memberName, personIsParent)
+        const addedMember = await contract?.addMember(familyId, memberName, memberAddress, personIsParent)
         const addedMemberReceipt = await addedMember.wait()
 
         toast({
