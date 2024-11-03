@@ -19,11 +19,13 @@ import { FamilyType } from "@/types";
 import { useWeb3React } from "@web3-react/core";
 import { formatNumberScale } from "@/functions/format";
 import { Switch } from "@/components/switch";
-import { useRecoilState } from "recoil";
+import { useRecoilValue } from "recoil";
 import { activeFamilyIndexState } from "../state/atoms/atom";
 import { useContract } from "@/hooks/services/useContract";
+import { useInitializeActiveFamilyIndex } from "@/hooks/useInitializeActiveFamilyIndex";
 
 export default function Home() {
+  useInitializeActiveFamilyIndex();
   const { account } = useWeb3React()
   const contract = useContract();
   const { addFamilyMember } = useContractWrite();
@@ -33,7 +35,7 @@ export default function Home() {
   const [memberName, setMemberName] = useState<string>('')
   const [memberAddress, setAddressName] = useState<string>('')
   const [personIsParent, setPersonIsParent] = useState<boolean>(false)
-  const [activeFamilyIndex, setActiveFamilyIndex] = useRecoilState(activeFamilyIndexState)
+  const activeFamilyIndex = useRecoilValue(activeFamilyIndexState)
   let activeFamilyObj = listOfFamilies[activeFamilyIndex]
 
   const loadData = useCallback(
