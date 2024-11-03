@@ -25,9 +25,8 @@ const ConnectedWalletButton = () => {
   const [open, setOpen] = useState<boolean>(false);
   const [addressCopied, setAddressCopied] = useState<boolean>(false);
   const { account, chainId, isActive } = useWeb3React();
-  const connectionType = window?.localStorage?.getItem(
-    "ConnectionType"
-  ) as keyof typeof ConnectionType;
+  const storedConnectionType = window?.localStorage?.getItem("ConnectionType");
+  const connectionType = storedConnectionType ? (storedConnectionType as ConnectionType) : null;
   const disconnectWallet = useDisconnectFromWallet(setOpen);
 
   useEffect(() => {
