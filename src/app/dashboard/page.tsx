@@ -15,13 +15,17 @@ import { useCallback, useEffect, useState } from "react";
 import Families from "@/components/tabs/contents/families";
 import Proposals from "@/components/tabs/contents/proposals";
 import useContractRead from '@/hooks/read-hooks/useContractRead';
-import { FamilyMemberType, FamilyType } from "@/types";
+import { FamilyType } from "@/types";
 import { useWeb3React } from "@web3-react/core";
 import { formatNumberScale } from "@/functions/format";
 import { Switch } from "@/components/switch";
+import { useRecoilState } from "recoil";
+import { activeFamilyIndexState } from "../state/atoms/atom";
+import { useContract } from "@/hooks/services/useContract";
 
 export default function Home() {
   const { account } = useWeb3React()
+  const contract = useContract();
   const { addFamilyMember } = useContractWrite();
   const { getUserFamilies } = useContractRead()
   const [listOfFamilies, setListOfFamilies] = useState<FamilyType[]>([])
@@ -29,7 +33,8 @@ export default function Home() {
   const [memberName, setMemberName] = useState<string>('')
   const [memberAddress, setAddressName] = useState<string>('')
   const [personIsParent, setPersonIsParent] = useState<boolean>(false)
-  const activeFamily = 0;
+  const [activeFamilyIndex, setActiveFamilyIndex] = useRecoilState(activeFamilyIndexState)
+  let activeFamilyObj = listOfFamilies[activeFamilyIndex]
 
   const loadData = useCallback(
     () => {
@@ -41,7 +46,17 @@ export default function Home() {
 
   useEffect(() => {
     loadData()
-  }, [loadData])
+
+    contract?.on('MemberModified', loadData)
+    contract?.on('ProposalCreated', loadData)
+    contract?.on('ProposalExecuted', loadData)
+    contract?.on('FamilyCreated', loadData)
+    contract?.on('FundsTransferred', loadData)
+
+    return () => {
+      contract?.removeAllListeners();
+    };
+  }, [contract, loadData])
 
 
   return (
@@ -54,19 +69,25 @@ export default function Home() {
             </div>
 
             <div className="text-xs">
-              <h6 className="text-lg font-semibold">{ listOfFamilies[activeFamily]?.name }&apos;s Family</h6>
-              <span className="">{ formatNumberScale(listOfFamilies[activeFamily]?.members?.length || 0) } Family members</span>
+              {listOfFamilies?.length ?
+                <>
+                  <h6 className="text-lg font-semibold">{ activeFamilyObj?.name }&apos;s Family</h6>
+                  <span className="">{ formatNumberScale(activeFamilyObj?.memberList?.length || 0) } Family members</span>
+                </>
+              :
+                <h6 className="text-lg font-semibold">No Family</h6>
+              }
             </div>
           </div>
           
           <div className="flex flex-col md:flex-row md:items-center gap-x-10 gap-y-4 md:gap-y-0">
             <div className="flex -space-x-2 overflow-hidden text-lg">
-              {listOfFamilies[activeFamily]?.members?.slice(0, 3).map((member, index) => (
+              {activeFamilyObj?.memberList?.slice(0, 3).map((member, index) => (
                 <div key={index} className="flex items-center justify-center font-semibold h-10 w-10 bg-green-400 rounded-full ring-2 ring-white">{member?.name[0]}</div>
               ))}
 
-              {listOfFamilies[activeFamily]?.members?.length > 3 &&
-                <div className="flex items-center justify-center font-medium text-xs h-10 w-10 bg-green-200 border-2 border-green-600 rounded-full ring-2 ring-white">+{listOfFamilies[activeFamily]?.members?.length - 3}</div>
+              {activeFamilyObj?.memberList?.length > 3 &&
+                <div className="flex items-center justify-center font-medium text-xs h-10 w-10 bg-green-200 border-2 border-green-600 rounded-full ring-2 ring-white">+{activeFamilyObj?.memberList?.length - 3}</div>
               }
             </div>
 
@@ -106,7 +127,7 @@ export default function Home() {
 
 
                   <Button className="btn w-full sm:w-1/2 chestnut h-14" onClick={() => {
-                    addFamilyMember(activeFamily, memberAddress, memberName, personIsParent).then(response => {
+                    addFamilyMember(activeFamilyObj?.familyId, memberAddress, memberName, personIsParent).then(response => {
                       if (response == true) {
                         setMemberName('')
                         setAddressName('')
@@ -141,8 +162,8 @@ export default function Home() {
 
           <TabsContent value="proposal">
             <Proposals
-              familyProposals={listOfFamilies[activeFamily]?.proposals}
-              activeFamily={activeFamily}
+              familyProposals={activeFamilyObj?.proposals}
+              familyMembers={activeFamilyObj?.memberList}
             />
           </TabsContent>
         </Tabs>

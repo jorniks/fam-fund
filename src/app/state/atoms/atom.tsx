@@ -20,3 +20,8 @@ export const loadingState = atom({
   key: "loadingState",
   default: false, // Set your default loading state here
 });
+
+export const activeFamilyIndexState = atom({
+  key: 'activeFamilyIndex',
+  default: Number(window?.sessionStorage?.getItem("activeFamilyIndex")) || 0
+});

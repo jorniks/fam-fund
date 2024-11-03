@@ -18,6 +18,8 @@ import {
 import useContractWrite from "@/hooks/write-hooks/useContractWrite";
 import { FamilyType } from "@/types";
 import MembersList from "./members-list";
+import { useSetRecoilState } from "recoil";
+import { activeFamilyIndexState } from "@/app/state/atoms/atom";
 
 
 const Families = (
@@ -28,6 +30,7 @@ const Families = (
   const [openNewFamily, setOpenNewFamily] = useState<boolean>(false)
   const [familyName, setFamilyName] = useState<string>('')
   const [personName, setPersonName] = useState<string>('')
+  const setActiveFamilyIndex = useSetRecoilState(activeFamilyIndexState)
   
   return (
     <>
@@ -84,7 +87,16 @@ const Families = (
                   </div>
                 </AccordionTrigger>
 
-                <AccordionContent className="bg-gray-50 py-6 px-4 rounded-b-md">
+                <AccordionContent className="bg-gray-50 space-y-6 mb-6 px-4 rounded-b-md">
+                  <section className="pt-3 text-right text-sm font-bold">
+                    <span className="cursor-pointer"
+                      onClick={() => {
+                        window?.sessionStorage.setItem('activeFamilyIndex', String(index))
+                        setActiveFamilyIndex(index)
+                      }}
+                    >Switch to this family</span>
+                  </section>
+
                   <Accordion type="single" collapsible>
                     <AccordionItem value="item-2">
                       <AccordionTrigger className="bg-white rounded-md p-5">Family Members</AccordionTrigger>
@@ -122,7 +134,7 @@ const Families = (
                     </AccordionItem>
                   </Accordion>
 
-                  <section className="space-y-5 px-4 mt-6 mb-12">
+                  <section className="space-y-5 px-4 mb-12">
                     <div className="-space-y-1 text-xs">
                       <label className="text-base font-semibold">500 AIA</label>
                       <label className="block">Requires atleast 51% vote or parent&apos;s approval to withdraw</label>
