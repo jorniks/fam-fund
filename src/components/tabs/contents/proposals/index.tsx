@@ -13,9 +13,12 @@ import useContractWrite from "@/hooks/write-hooks/useContractWrite";
 import { FamilyMember, FamilyProposals } from "@/types";
 import { useState } from "react";
 import ProposalCard from "./proposal-card";
+import { useRecoilValue } from "recoil";
+import { activeFamilyIndexState } from "@/app/state/atoms/atom";
 
 const Proposals = ({ familyProposals, familyMembers }: { familyProposals: FamilyProposals[], familyMembers: FamilyMember[] }) => {
   const { createProposal } = useContractWrite();
+  const familyId = useRecoilValue(activeFamilyIndexState)
   const [openNewProposal, setOpenNewProposal] = useState<boolean>(false)
   const [proposalObj, setProposalObj] = useState({
     recipient: "",
@@ -84,7 +87,7 @@ const Proposals = ({ familyProposals, familyMembers }: { familyProposals: Family
               </div>
 
               <Button className="btn w-full sm:w-1/2 chestnut h-14 sm:col-span-6" onClick={() => {
-                createProposal(0, proposalObj.description, proposalObj.amount, proposalObj.recipient, proposalObj.title, proposalObj.duration).then(response => {
+                createProposal(familyId, proposalObj.description, proposalObj.amount, proposalObj.recipient, proposalObj.title, proposalObj.duration).then(response => {
                   if (response == true) {
                     setProposalObj({
                       recipient: "",
@@ -110,6 +113,7 @@ const Proposals = ({ familyProposals, familyMembers }: { familyProposals: Family
               key={index}
               proposalIndex={index}
               proposal={proposal}
+              familyId={familyId}
               familyMembers={familyMembers}
             />
           ))

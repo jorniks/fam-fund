@@ -4,14 +4,14 @@ import { Button } from "@/components/button";
 import { FamilyMember, FamilyProposals } from "@/types";
 import { useState } from "react";
 import useContractWrite from "@/hooks/write-hooks/useContractWrite";
-import { useRecoilValue } from "recoil";
-import { activeFamilyIndexState } from "@/app/state/atoms/atom";
 import { formatBalance, formatNumberScale } from "@/functions/format";
 
-const ProposalCard = ({ proposal, proposalIndex, familyMembers }: { proposal: FamilyProposals, proposalIndex: number, familyMembers: FamilyMember[] }) => {
+const ProposalCard = (
+  { proposal, proposalIndex, familyMembers, familyId }:
+  { proposal: FamilyProposals, proposalIndex: number, familyMembers: FamilyMember[], familyId: number }
+) => {
   const { castVote, claimFunds, vetoProposal } = useContractWrite();
   const [openMenu, setOpenMenu] = useState<boolean>(false)
-  const familyId = useRecoilValue(activeFamilyIndexState)
 
   return (
     <dl className="md:col-span-2 border hover:shadow-sm duration-500 bg-white rounded flex flex-col">
