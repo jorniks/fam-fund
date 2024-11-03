@@ -10,15 +10,13 @@ import {
   DialogTrigger,
 } from "@/components/dialog"
 import useContractWrite from "@/hooks/write-hooks/useContractWrite";
-import { FamilyMember, FamilyProposals } from "@/types";
+import { FamilyType } from "@/types";
 import { useState } from "react";
 import ProposalCard from "./proposal-card";
-import { useRecoilValue } from "recoil";
-import { activeFamilyIndexState } from "@/app/state/atoms/atom";
 
-const Proposals = ({ familyProposals, familyMembers }: { familyProposals: FamilyProposals[], familyMembers: FamilyMember[] }) => {
+const Proposals = ({ family }: { family: FamilyType }) => {
   const { createProposal } = useContractWrite();
-  const familyId = useRecoilValue(activeFamilyIndexState)
+  const familyId = Number(family?.familyId)
   const [openNewProposal, setOpenNewProposal] = useState<boolean>(false)
   const [proposalObj, setProposalObj] = useState({
     recipient: "",
@@ -107,14 +105,14 @@ const Proposals = ({ familyProposals, familyMembers }: { familyProposals: Family
       </section>
 
       <section className="grid grid-cols-1 md:grid-cols-10 gap-4">
-        {familyProposals?.length > 0 ?
-          familyProposals?.map((proposal, index) => (
+        {family?.proposals?.length > 0 ?
+          family?.proposals?.map((proposal, index) => (
             <ProposalCard
               key={index}
               proposalIndex={index}
               proposal={proposal}
               familyId={familyId}
-              familyMembers={familyMembers}
+              familyMembers={family?.memberList}
             />
           ))
         :

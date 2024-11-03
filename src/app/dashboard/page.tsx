@@ -164,8 +164,7 @@ export default function Home() {
 
           <TabsContent value="proposal">
             <Proposals
-              familyProposals={activeFamilyObj?.proposals}
-              familyMembers={activeFamilyObj?.memberList}
+              family={activeFamilyObj}
             />
           </TabsContent>
         </Tabs>
